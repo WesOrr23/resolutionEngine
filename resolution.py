@@ -1,6 +1,5 @@
 import logging
 import timeit
-import cProfile
 
 
 class DisjunctedClause():
@@ -190,7 +189,7 @@ class DisjunctedClause():
         asserted_literals = result & ((1 << map_size) - 1)                  # Keep only the leftmost <map_size> bits by ANDing
         negated_literals = (result >> map_size) & ((1 << map_size) - 1)     # Keep the the rightmost bits...
         end = timeit.default_timer()
-        # print(auto_format_time(end-start))
+
         # Return None if a contradiction (empty clause) is found, otherwise a new clause to be added into the knowledge base!
         return None if result == 0 else DisjunctedClause(literal_map=self.literal_map, asserted_literals=asserted_literals, negated_literals=negated_literals, auto_parse=False)
 
@@ -424,9 +423,8 @@ if __name__ == "__main__":
     log.addHandler(log_handler)
     log.setLevel(logging.ERROR)
 
-    #
+    # Run the test-cases, timing them for efficiency.
     iterations = 1
     runtime = timeit.timeit(lambda: run_test_cases(), number=iterations)
 
     print(f"Average Runtime: {auto_format_time(runtime / iterations)}")
-    # cProfile.run('run_test_cases()')
